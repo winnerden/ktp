@@ -1,10 +1,10 @@
 #!/bin/bash
 date_start=2024-09-01
 date_end=2025-05-28
-TXT=kanikuls_gui.txt
-TXT1=holiday_gui.txt
-TXT2=date.txt
-TXT3=date_osn.csv
+TXT=file/kanikuls.txt
+TXT1=file/holiday.txt
+TXT2=file/date.txt
+CSV=file/date.csv
 HOL=()
 KANIKUL_OSN=(2024-10-28 2024-10-29 2024-10-30 2024-10-31 2024-11-01 2024-11-02 2024-11-03 2024-12-30 2024-12-31 2025-01-01 2025-01-02 2025-01-03 2025-01-04 2025-01-05 2025-01-06 2025-01-07 2025-01-08 2025-03-24 2025-03-25 2025-03-26 2025-03-27 2025-03-28 2025-03-29 2025-03-30)
 KANIKUL_DOP=(2024-10-28 2024-10-29 2024-10-30 2024-10-31 2024-11-01 2024-11-02 2024-11-03 2024-12-30 2024-12-31 2025-01-01 2025-01-02 2025-01-03 2025-01-04 2025-01-05 2025-01-06 2025-01-07 2025-01-08 2025-02-17 2025-02-18 2025-02-19 2025-02-20 2025-02-21 2025-02-22 2025-02-23 2025-03-24 2025-03-25 2025-03-26 2025-03-27 2025-03-28 2025-03-29 2025-03-30)
@@ -13,6 +13,10 @@ HOLIDAY=(2024-10-04 2025-02-24 2025-03-10 2025-05-01 2025-05-02 2025-05-09)
 DATE=()
 LESS=()
 KANIK=(осенних зимних дополнительных весенних)
+
+if [ ! -d file ]; then
+    mkdir -p file;
+fi;
 
 # Провекрка выходных
 if [[ -z "$TXT1" ]]; then
@@ -60,8 +64,8 @@ function lesson () {
         rm -rf "$TXT2"
       fi
       # shellcheck disable=SC2236
-      if [[ ! -z "$TXT3" ]]; then
-        rm -rf "$TXT3"
+      if [[ ! -z "$CSV" ]]; then
+        rm -rf "$CSV"
       fi
   case $? in
       0)
@@ -227,7 +231,7 @@ function progress() {
     do
       # shellcheck disable=SC2046
       # shellcheck disable=SC2005
-      echo $(date --date="$line" +%d.%m.%Y) | paste -sd " " >> $TXT3
+      echo $(date --date="$line" +%d.%m.%Y) | paste -sd " " >> $CSV
     done < data.tmp
 
 # Окно вывода
@@ -236,7 +240,7 @@ function progress() {
       --text="НАПОМИНАНИЕ\n27.05.2024  и 28.05.2025 года \nзанятия проводятся по  расписанию\n понедельника и пятницы!\n\nОткрыть файл?"
     case $? in
           0)
-          libreoffice $TXT3
+          libreoffice $CSV
         ;;
           1)
             exit
